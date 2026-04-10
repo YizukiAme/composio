@@ -205,7 +205,7 @@ const connectionRequest = await composio.connectedAccounts.initiate(
 ### link()
 
 ```typescript
-async link(userId: string, authConfigId: string, options?: { callbackUrl?: string }): Promise<ConnectionRequest>
+async link(userId: string, authConfigId: string, options?: { alias?: string; callbackUrl?: string }): Promise<ConnectionRequest>
 ```
 
 **Parameters**
@@ -312,6 +312,44 @@ async refresh(nanoid: string, options?: { redirectUrl?: string; validateCredenti
 ```typescript
 // Refresh a connected account's credentials
 const refreshedAccount = await composio.connectedAccounts.refresh('conn_abc123');
+```
+
+---
+
+### update()
+
+Update a connected account's alias and/or credentials.
+
+```typescript
+async update(nanoid: string, params: ConnectedAccountPatchParams): Promise<ConnectedAccountPatchResponse>
+```
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `nanoid` | `string` | The unique identifier of the connected account |
+| `params` | `ConnectedAccountPatchParams` | The update parameters |
+
+**Returns**
+
+`Promise<ConnectedAccountPatchResponse>` — The update response
+
+**Example**
+
+```typescript
+// Set an alias
+await composio.connectedAccounts.update('ca_abc123', { alias: 'work-gmail' });
+
+// Update credentials
+await composio.connectedAccounts.update('ca_abc123', {
+  connection: {
+    state: {
+      authScheme: 'BEARER_TOKEN',
+      val: { token: 'new-access-token' },
+    },
+  },
+});
 ```
 
 ---
